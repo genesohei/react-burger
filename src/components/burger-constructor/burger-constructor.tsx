@@ -1,10 +1,16 @@
 import React from "react";
 import styles from "./burger-constructor.module.css";
 import scrollbar from "../../styles/scrollbar.module.css";
+import { Ingredient } from "../../utils/interfaces";
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 
-// @ts-ignore
-function BurgerConstructor(props) {
+interface BurgerConstructorProps {
+    topItem: Ingredient
+    bottomItem: Ingredient
+    items: Ingredient[]
+}
+
+function BurgerConstructor({ topItem, bottomItem, items }: BurgerConstructorProps) {
     return (
         <>
             <ul className={`${styles.list} ml-4 mt-25 mb-10 pr-4`}>
@@ -12,13 +18,13 @@ function BurgerConstructor(props) {
                     <ConstructorElement
                         type='top'
                         isLocked={true}
-                        text={props.topItem.name + ' (верх)'}
-                        thumbnail={props.topItem.image}
-                        price={props.topItem.price}
+                        text={topItem.name + ' (верх)'}
+                        thumbnail={topItem.image}
+                        price={topItem.price}
                     />
                 </li>
                 <ul className={`${styles.list} ${scrollbar.scrollbar} ${styles['draggable-list']} pr-2`} key="items">
-                    {props.items.map((item: any, index: number) => (
+                    {items.map((item, index: number) => (
                         <li key={item._id + '_' + index}>
                             <span className={styles['draggable-icon']}>
                                 <DragIcon type='primary'/>
@@ -35,15 +41,15 @@ function BurgerConstructor(props) {
                     <ConstructorElement
                         isLocked={true}
                         type='bottom'
-                        text={props.bottomItem.name + ' (низ)'}
-                        thumbnail={props.bottomItem.image}
-                        price={props.bottomItem.price}
+                        text={bottomItem.name + ' (низ)'}
+                        thumbnail={bottomItem.image}
+                        price={bottomItem.price}
                     />
                 </li>
             </ul>
             <div className={`${styles.order} mr-4 mb-10`}>
                 <p className="text text_type_digits-medium">
-                    {props.topItem.price + props.items.reduce((acc: any, p: any) => acc + p.price, 0) + props.bottomItem.price}
+                    {topItem.price + items.reduce((acc, p) => acc + p.price, 0) + bottomItem.price}
                 </p>
                 <span className='ml-2 mr-10'>
                     <CurrencyIcon type="primary"/>

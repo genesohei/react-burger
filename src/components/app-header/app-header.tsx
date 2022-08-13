@@ -9,7 +9,7 @@ function AppHeader() {
         <header className={styles.header}>
             <nav className={styles.nav}>
                 <div className={styles.group}>
-                    <div className={styles['group-item']} style={{marginRight: '8px'}}>
+                    <div className={`${styles['group-item']} mr-2`}>
                         <BurgerIcon type={"primary"}/>
                         <span className="text text_type_main-default">Конструктор</span>
                     </div>
@@ -17,7 +17,6 @@ function AppHeader() {
                         <ListIcon type={"secondary"}/>
                         <span className="text text_type_main-default">Лента заказов</span>
                     </div>
-
                 </div>
                 <div className={`${styles.group} ${styles.logo}`}>
                     <Logo/>

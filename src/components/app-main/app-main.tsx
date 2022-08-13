@@ -10,7 +10,7 @@ function AppMain() {
     const mainIngredients: Array<Ingredient> = [];
     const sauceIngredients: Array<Ingredient> = [];
     const topItem = data[0];
-    const bottomItem = data[data.length - 1];
+    const bottomItem = data[0];
     const items = data.slice(1, data.length - 1);
 
     data.forEach(item => {
@@ -25,10 +25,10 @@ function AppMain() {
 
     return (
         <main className={styles.main}>
-            <section className={styles.column} style={{marginRight: '20px'}}>
+            <section className={styles.column}>
                 <BurgerIngredients bun={bunIngredients} main={mainIngredients} sauce={sauceIngredients}/>
             </section>
-            <section className={styles.column} style={{marginLeft: '20px'}}>
+            <section className={styles.column}>
                 <BurgerConstructor topItem={topItem} bottomItem={bottomItem} items={items}/>
             </section>
         </main>

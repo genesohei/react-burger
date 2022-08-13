@@ -1,12 +1,17 @@
 import React from "react";
 import styles from "./burger-ingredients.module.css";
 import scrollbar from "../../styles/scrollbar.module.css";
-import PropTypes from "prop-types";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Ingredient } from "../../utils/interfaces";
 import IngredientList from "../ingredient-list/ingredient-list";
 
-// @ts-ignore
-function BurgerIngredients({ bun, main, sauce }) {
+interface BurgerIngredientsProps {
+    bun: Ingredient[]
+    main: Ingredient[]
+    sauce: Ingredient[]
+}
+
+function BurgerIngredients({ bun, main, sauce }: BurgerIngredientsProps) {
     const [current, setCurrent] = React.useState('Булки');
     return (
         <>

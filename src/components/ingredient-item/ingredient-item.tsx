@@ -2,7 +2,14 @@ import React from "react";
 import styles from "./ingredient-item.module.css";
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-function IngredientItem({ name, price, image }: any) {
+interface IngredientItemProps {
+    name: string
+    price: number
+    image: string
+    value: number
+}
+
+function IngredientItem({ name, price, image, value }: IngredientItemProps) {
     return (
         <li className={styles.item}>
             <div className={styles.image} style={{backgroundImage: `url(${image})`}}>
