@@ -2,18 +2,22 @@ import React from "react";
 import styles from "./app-main.module.css";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { data } from "../../utils/data";
 import { Ingredient } from "../../utils/interfaces";
 
-function AppMain() {
+interface AppMainProps {
+    ingredientData: Ingredient[]
+    setModal: Function
+}
+
+function AppMain({ ingredientData, setModal }: AppMainProps) {
     const bunIngredients: Array<Ingredient> = [];
     const mainIngredients: Array<Ingredient> = [];
     const sauceIngredients: Array<Ingredient> = [];
-    const topItem = data[0];
-    const bottomItem = data[0];
-    const items = data.slice(1, data.length - 1);
+    const topItem = ingredientData[0];
+    const bottomItem = ingredientData[0];
+    const items = ingredientData.slice(1, ingredientData.length - 1);
 
-    data.forEach(item => {
+    ingredientData.forEach(item => {
         if (item.type === 'bun') {
             bunIngredients.push(item);
         } else if (item.type === 'main') {
@@ -26,10 +30,10 @@ function AppMain() {
     return (
         <main className={styles.main}>
             <section className={styles.column}>
-                <BurgerIngredients bun={bunIngredients} main={mainIngredients} sauce={sauceIngredients}/>
+                <BurgerIngredients bun={bunIngredients} main={mainIngredients} sauce={sauceIngredients} setModal={setModal}/>
             </section>
             <section className={styles.column}>
-                <BurgerConstructor topItem={topItem} bottomItem={bottomItem} items={items}/>
+                <BurgerConstructor topItem={topItem} bottomItem={bottomItem} items={items} setModal={setModal}/>
             </section>
         </main>
     )

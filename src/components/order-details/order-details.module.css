@@ -1,0 +1,18 @@
+.order {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 640px;
+    padding-bottom: 80px;
+    box-sizing: border-box;
+}
+
+.order-title {
+    color: #f2f2f3;
+    text-shadow: 0 0 16px rgba(51, 51, 255, 0.25), 0 0 8px rgba(51, 51, 255, 0.25), 0 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.order-image {
+    width: 102px;
+    height: 107px;
+}
