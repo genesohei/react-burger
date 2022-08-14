@@ -1,0 +1,12 @@
+.title {
+    padding: 40px 0 0;
+}
+
+.menu {
+    display: flex;
+}
+
+.container {
+    overflow-y: auto;
+    height: calc(100vh - 250px);
+}

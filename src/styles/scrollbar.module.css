@@ -1,0 +1,14 @@
+.scrollbar {
+    scrollbar-color: #2f2f37 #8585ad;
+    scrollbar-width: thin;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: calc(var(--offset-base-size) * 2);
+}
+.scrollbar::-webkit-scrollbar-track {
+    background: #2f2f37;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #8585ad;
+}
