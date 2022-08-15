@@ -1,16 +1,13 @@
 import React from "react";
 import styles from "./ingredient-details.module.css";
+import { Ingredient } from "../../utils/interfaces";
 
 interface IngredientDetailsProps {
-    name: string
-    proteins: number
-    fat: number
-    carbohydrates: number
-    calories: number
-    image: string
+    item: Ingredient
 }
 
-function IngredientDetails({ name, proteins, fat, carbohydrates, calories, image }: IngredientDetailsProps) {
+function IngredientDetails({ item }: IngredientDetailsProps) {
+    const {name, proteins, fat, carbohydrates, calories, image} = item;
     return (
         <div className={styles.content}>
             <div className={`${styles['content-product']} pr-15 pl-15`}>
