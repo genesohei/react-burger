@@ -22,21 +22,21 @@ function Modal({ children, title, setModal }: ModalProps) {
         });
     }
 
-    const handleKeydown = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-            onClose();
-        }
-    }
-
     useEffect(() => {
-        window.addEventListener('keydown', handleKeydown)
-        return () => {
-            window.removeEventListener('keydown', handleKeydown)
+        const handleKeydown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                onClose();
+            }
         }
-    });
+        window.addEventListener('keydown', handleKeydown);
+        return () => {
+            window.removeEventListener('keydown', handleKeydown);
+        }
+    }, []);
 
     return createPortal(
-        <ModalOverlay>
+        <>
+            <ModalOverlay onClose={onClose}/>
             <div className={styles.modal}>
                 <ModalHeader title={title}>
                     <div className={styles['modal-close']} onClick={onClose}><CloseIcon type="primary"/></div>
@@ -45,7 +45,7 @@ function Modal({ children, title, setModal }: ModalProps) {
                     {children}
                 </div>
             </div>
-        </ModalOverlay>,
+        </>,
         modalRoot
     )
 }

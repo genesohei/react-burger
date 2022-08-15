@@ -20,15 +20,8 @@ function BurgerIngredients({ bun, main, sauce, setModal }: BurgerIngredientsProp
         setModal({
             isVisible: true,
             title: 'Детали ингредиента',
-            content: <IngredientDetails
-                name={item.name}
-                proteins={item.proteins}
-                fat={item.fat}
-                carbohydrates={item.carbohydrates}
-                calories={item.calories}
-                image={item.image}
-            />
-        })
+            content: <IngredientDetails item={item}/>
+        });
     }
 
     return (

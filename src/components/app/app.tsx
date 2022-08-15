@@ -38,8 +38,15 @@ function App() {
         setState({...state, isLoading: true});
         try {
             const result = await fetch(API_INGREDIENTS);
+            if (!result.ok) {
+                return Promise.reject(`Ошибка ${result.status}`);
+            }
             const data = await result.json();
-            setState({ ingredientData: data.data, isLoading: false });
+            if (data.success && data.data && Array.isArray(data.data)) {
+                setState({ ingredientData: data.data, isLoading: false });
+            } else {
+                return Promise.reject('Отсутствуют данные');
+            }
         } catch (err) {
             setState({ ingredientData, isLoading: false });
         }
