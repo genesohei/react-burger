@@ -3,14 +3,23 @@ import styles from "./burger-constructor.module.css";
 import scrollbar from "../../styles/scrollbar.module.css";
 import { Ingredient } from "../../utils/interfaces";
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import OrderDetails from "../order-details/order-details";
 
 interface BurgerConstructorProps {
     topItem: Ingredient
     bottomItem: Ingredient
     items: Ingredient[]
+    setModal: Function
 }
 
-function BurgerConstructor({ topItem, bottomItem, items }: BurgerConstructorProps) {
+function BurgerConstructor({ topItem, bottomItem, items, setModal }: BurgerConstructorProps) {
+    const handleOrderClick = () => {
+        setModal({
+            isVisible: true,
+            content: <OrderDetails/>
+        })
+    }
+
     return (
         <>
             <ul className={`${styles.list} ml-4 mt-25 mb-10 pr-4`}>
@@ -54,7 +63,7 @@ function BurgerConstructor({ topItem, bottomItem, items }: BurgerConstructorProp
                 <span className='ml-2 mr-10'>
                     <CurrencyIcon type="primary"/>
                 </span>
-                <Button type="primary" size="medium">Оформить заказ</Button>
+                <Button type="primary" size="medium" onClick={handleOrderClick}>Оформить заказ</Button>
             </div>
         </>
     )

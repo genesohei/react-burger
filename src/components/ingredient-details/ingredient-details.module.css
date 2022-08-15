@@ -1,0 +1,42 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    width: 640px;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.content-image {
+    width: 480px;
+    height: 240px;
+    margin: 0 auto;
+}
+
+.content-text {
+    padding-top: 16px;
+    padding-bottom: 32px;
+    text-align: center;
+}
+
+.content-product {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-list {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+}
+
+.product-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    list-style-type: none;
+}
+
+.product-text {
+    padding: 0 0 8px;
+}
