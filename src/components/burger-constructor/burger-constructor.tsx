@@ -1,22 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import styles from "./burger-constructor.module.css";
 import scrollbar from "../../styles/scrollbar.module.css";
 import OrderDetails from "../order-details/order-details";
 import {IModalContext} from "../../utils/interfaces";
-import {API_ORDERS} from "../../utils/constants";
 import {ConstructorElement, DragIcon, CurrencyIcon, Button} from "@ya.praktikum/react-developer-burger-ui-components";
 import {ModalContext} from "../../contexts/modalContext";
 import {ConstructorContext} from "../../contexts/constructorContext";
+import {Orders} from "../../utils/api";
 
 function BurgerConstructor() {
     const { showModal } = useContext(ModalContext) as IModalContext;
     const { constructor, setConstructor } = useContext(ConstructorContext);
     const { bun, ingredients } = constructor;
 
-    const getTotalPrice = () => {
+    const getTotalPrice = useMemo(() => {
         if (!bun) return 0;
         return bun.price * 2 + ingredients.reduce((acc, i) => acc + i.price, 0);
-    }
+    }, [constructor]);
 
     const handleRemoveIngredientClick = (id: string) => {
         if (!id) return;
@@ -27,7 +27,9 @@ function BurgerConstructor() {
     }
 
     const handleOrderClick = () => {
-        makeAnOrder((orderNumber: number) => {
+        const options = { ingredients: constructor.ingredients.map(item => item._id) };
+        Orders.makeAnOrder(options).then((data) => {
+            const orderNumber = data.order.number;
             setConstructor({
                 ...constructor,
                 orderNumber
@@ -35,29 +37,9 @@ function BurgerConstructor() {
             showModal({
                 component: <OrderDetails orderNumber={orderNumber}/>
             });
-        })
-    }
-
-    const makeAnOrder = async (resolve: Function, reject?: Function) => {
-        try {
-            const options = { ingredients: constructor.ingredients.map(item => item._id) };
-            const result = await fetch(API_ORDERS, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json;charset=utf-8' },
-                body: JSON.stringify(options)
-            });
-            if (!result.ok) {
-                return Promise.reject(`Ошибка ${result.status}`);
-            }
-            const data = await result.json();
-            if (data.success && data.hasOwnProperty('order') && data.order.hasOwnProperty('number')) {
-                resolve(data.order.number);
-            } else {
-                return Promise.reject(data);
-            }
-        } catch (err) {
-            console.log(err);
-        }
+        }).catch(err => {
+            console.error(err);
+        });
     }
 
     return (
@@ -105,7 +87,7 @@ function BurgerConstructor() {
             </ul>
             <div className={`${styles.order} mr-4 mb-10`}>
                 <p className="text text_type_digits-medium">
-                    {getTotalPrice()}
+                    {getTotalPrice}
                 </p>
                 <span className='ml-2 mr-10'>
                     <CurrencyIcon type="primary"/>

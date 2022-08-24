@@ -1,4 +1,4 @@
-import React from "react";
+import React, {forwardRef} from "react";
 import styles from "./ingredient-list.module.css";
 import { Ingredient } from "../../utils/interfaces";
 import IngredientItem from "../ingredient-item/ingredient-item";
@@ -9,9 +9,11 @@ interface IngredientListProps {
     handleIngredientClick: Function
 }
 
-function IngredientList({ title, list, handleIngredientClick }: IngredientListProps) {
+type Ref = HTMLDivElement;
+
+const IngredientList = forwardRef<Ref, IngredientListProps>(({ title, list, handleIngredientClick }, ref) => {
     return (
-        <section className={'mb-10'}>
+        <section className={'mb-10'} ref={ref}>
             <h2 className={'text text_type_main-medium mb-6'}>{title}</h2>
             <ul className={`${styles.list} ml-4`}>
                 { list.map((item) => <IngredientItem
@@ -22,6 +24,6 @@ function IngredientList({ title, list, handleIngredientClick }: IngredientListPr
             </ul>
         </section>
     )
-}
+});
 
 export default IngredientList;
