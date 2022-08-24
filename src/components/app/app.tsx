@@ -1,62 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import styles from './app.module.css';
-import AppHeader from '../app-header/app-header';
-import AppMain from '../app-main/app-main';
-import Modal from '../modal/modal';
-import { API_INGREDIENTS } from '../../utils/constants.js';
-import { ingredientData } from "../../utils/data";
-import { Ingredient } from "../../utils/interfaces";
+import React, { useState, useEffect } from "react";
+import styles from "./app.module.css";
+import AppHeader from "../app-header/app-header";
+import AppMain from "../app-main/app-main";
+import Modal from "../modal/modal";
+import {INGREDIENT_TYPE} from "../../utils/constants.js";
+import {Ingredient, IModalState, IConstructorState} from "../../utils/interfaces";
+import {IngredientsContext} from "../../contexts/ingredientsContext";
+import {ModalContext} from "../../contexts/modalContext";
+import {ConstructorContext} from "../../contexts/constructorContext";
+import {Ingredients} from "../../utils/api";
 
 interface MainState {
-    ingredientData: Ingredient[]
     isLoading: boolean
-}
-
-interface ModalState {
-    isVisible: boolean
-    title: string
-    content: React.ReactNode
 }
 
 function App() {
     const [state, setState] = useState({
-        ingredientData: [],
         isLoading: true
     } as MainState);
 
-    const [modal, setModal] = useState({
-        isVisible: false,
-        title: '',
-        content: null
-    } as ModalState);
+    const [modal, setModal] = React.useState<IModalState>({
+        component: null,
+        props: null,
+    });
+
+    const showModal = (modal: IModalState) => {
+        setModal({component: modal.component, props: modal.props});
+    };
+
+    const hideModal = () => {
+        setModal({...modal, component: null, props: null});
+    };
+
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+
+    const [constructor, setConstructor] = React.useState<IConstructorState>({
+        ingredients: [],
+        bun: null,
+        orderNumber: 0
+    });
 
     useEffect(() => {
-        getIngredientData();
-    }, [])
-
-    const getIngredientData = async () => {
         setState({...state, isLoading: true});
-        try {
-            const result = await fetch(API_INGREDIENTS);
-            if (!result.ok) {
-                return Promise.reject(`Ошибка ${result.status}`);
-            }
-            const data = await result.json();
-            if (data.success && data.data && Array.isArray(data.data)) {
-                setState({ ingredientData: data.data, isLoading: false });
-            } else {
-                return Promise.reject('Отсутствуют данные');
-            }
-        } catch (err) {
-            setState({ ingredientData, isLoading: false });
-        }
-    }
+        Ingredients.getIngredients().then((data) => {
+            setIngredients(data.data);
+            setConstructor({
+                ...constructor,
+                ingredients: data.data.filter((ingredient: Ingredient) => ingredient.type !== INGREDIENT_TYPE.BUN),
+                bun: (data.data.find((ingredient: Ingredient) => ingredient.type === INGREDIENT_TYPE.BUN) as Ingredient)
+            });
+        }).catch(err => {
+            console.error(err);
+        }).finally(() => {
+            setState({...state, isLoading: false});
+        });
+    }, []);
 
     return (
         <div className={styles.app}>
-            <AppHeader/>
-            <AppMain ingredientData={ingredientData} setModal={setModal}/>
-            {modal.isVisible && <Modal title={modal.title} setModal={setModal}>{modal.content}</Modal>}
+            <ModalContext.Provider value={{ modal, showModal, hideModal }}>
+                <IngredientsContext.Provider value={{ ingredients }}>
+                    <ConstructorContext.Provider value={{ constructor, setConstructor }}>
+                        <AppHeader/>
+                        {ingredients && ingredients.length && <AppMain/>}
+                        {modal && modal.component && <Modal/>}
+                    </ConstructorContext.Provider>
+                </IngredientsContext.Provider>
+            </ModalContext.Provider>
         </div>
     );
 }
